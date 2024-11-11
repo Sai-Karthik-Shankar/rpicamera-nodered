@@ -1,0 +1,106 @@
+[
+    {
+        "id": "2d4ed6b8e67b6b49",
+        "type": "subflow",
+        "name": "rpicamera",
+        "info": "Captures images from the Raspberry Pi camera module on Raspbian Bookworm operating system.\n\n# Inputs\n\n- `payload`     _string_\n\n    Input trigger to initiate image capture\n\n# Outputs\n\n- `payload`     _buffer_\n\n    A buffer of the image captured by the camera, with the dimensions specified in the input.\n\n\n\n\n",
+        "category": "Raspberry_Pi",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "57005d5594327159"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 900,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "c782bf83b2225a6c",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "width",
+                "type": "num",
+                "value": "320"
+            },
+            {
+                "name": "height",
+                "type": "str",
+                "value": "240"
+            }
+        ],
+        "meta": {
+            "module": "node-red-contrib-rpicamera",
+            "type": "rpicamera",
+            "version": "0.1.0",
+            "author": "saikarthikshankar@gmail.com",
+            "desc": "raspi camera",
+            "keywords": "NODE-RED, camera",
+            "license": "Apache-2.0"
+        },
+        "color": "#3FADB5",
+        "icon": "node-red/arrow-in.svg"
+    },
+    {
+        "id": "c782bf83b2225a6c",
+        "type": "exec",
+        "z": "2d4ed6b8e67b6b49",
+        "command": "rpicam-still ",
+        "addpay": false,
+        "append": "-n -t 10 --width 320 --height 240 -o - ",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 450,
+        "y": 80,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "57005d5594327159",
+        "type": "function",
+        "z": "2d4ed6b8e67b6b49",
+        "name": "function 2",
+        "func": "//-n -t 10 --width 320 --height 240 -o - \nvar prev = \"-n\";\nif (env.get(\"preview\")){\n    prev = \"-p\";}\nelse{ \n    prev = \"-n\";}\nmsg.payload = prev +\" -t 1000 --width \" +env.get(\"width\"); +\" --height \" + env.get(\"height\");+\"-o -\"\n\nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 80,
+        "wires": [
+            [
+                "c782bf83b2225a6c"
+            ]
+        ]
+    },
+    {
+        "id": "352022f0b852fa6f",
+        "type": "subflow:2d4ed6b8e67b6b49",
+        "z": "9a7598d65b2bec1c",
+        "name": "",
+        "x": 380,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    }
+]
